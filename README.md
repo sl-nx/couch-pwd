@@ -1,7 +1,7 @@
 
-# couch-pwd
+# @sensu/couch-pwd [![Build Status](https://travis-ci.org/sen-su/couch-pwd.svg?branch=master)](https://travis-ci.org/sen-su/couch-pwd)
 
-[![Build Status](https://travis-ci.org/zeMirco/couch-pwd.svg?branch=master)](https://travis-ci.org/zeMirco/couch-pwd)
+## An up-to-date version of couch-pwd that is actually published.
 
 Hash and compare passwords with the crypto's pbkdf2.
 Heavily inspired by [node-pwd](https://github.com/visionmedia/node-pwd).
@@ -21,13 +21,13 @@ Module has two goals
 - verify user passwords without making requests to `/_session` API
 - use the same hashing algorithm for other databases
 
-# Installation
+## Installation
 
 ```bash
 npm install couch-pwd
 ```
 
-# Example
+## Example
 
 On signup generate a salt / password hash, and save it somewhere:
 
