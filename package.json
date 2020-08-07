@@ -1,6 +1,6 @@
 {
   "name": "@sl-nx/couch-pwd",
-  "version": "1.0.1",
+  "version": "2.0.0",
   "description": "CouchDB salt and password generation with PBKDF2",
   "scripts": {
     "lint": "./node_modules/.bin/eslint index.js test",
