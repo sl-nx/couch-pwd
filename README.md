@@ -1,17 +1,17 @@
-
-# @sensu/couch-pwd [![Build Status](https://travis-ci.org/sen-su/couch-pwd.svg?branch=master)](https://travis-ci.org/sen-su/couch-pwd)
+# @sl-nx/couch-pwd
 
 ## An up-to-date version of couch-pwd that is actually published.
 
 Hash and compare passwords with the crypto's pbkdf2.
 Heavily inspired by [node-pwd](https://github.com/visionmedia/node-pwd).
 
-Uses the following values as defaults
+Uses the following values as defaults:
 
 - iterations = 10
 - keylen = 20
 - size = 16
 - encoding = 'hex'
+- digest = 'SHA1'
 
 The resulting salt and password Strings are the same you'd get when you save a
 user to CouchDB and let CouchDB do all the hashing for you.
@@ -32,22 +32,24 @@ npm install couch-pwd
 On signup generate a salt / password hash, and save it somewhere:
 
 ```js
-var pwd = require('couch-pwd');
-pwd.hash('my password', function(err, salt, hash){
+var pwdModule = require('couch-pwd');
+var pwd = new pwdModule();
+pwd.hash('my password', function (err, salt, hash) {
   user.salt = salt;
   user.hash = hash;
-})
+});
 ```
 
 To authenticate load and compare:
 
 ```js
-var pwd = require('couch-pwd');
-pwd.hash('submitted password', user.salt, function(err, hash){
+var pwdModule = require('couch-pwd');
+var pwd = new pwdModule();
+pwd.hash('submitted password', user.salt, function (err, hash) {
   if (user.hash == hash) {
     // yay
   }
-})
+});
 ```
 
 ## License
