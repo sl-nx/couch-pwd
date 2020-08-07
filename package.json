@@ -1,5 +1,5 @@
 {
-  "name": "@sensu/couch-pwd",
+  "name": "@sl-nx/couch-pwd",
   "version": "1.0.1",
   "description": "CouchDB salt and password generation with PBKDF2",
   "scripts": {
@@ -23,22 +23,21 @@
       "name": "Bjorn Stromberg",
       "email": "bjorn@bjornstar.com",
       "url": "http://bjornstar.com/about"
+    },
+    {
+      "name": "Fynn Leitow",
+      "url": "https://github.com/lytefm"
     }
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/zeMirco/couch-pwd"
+    "url": "https://github.com/sl-nx/couch-pwd"
   },
   "license": "MIT",
   "devDependencies": {
-    "eslint": "^4.7.1",
-    "eslint-config-standard": "^10.2.1",
-    "eslint-plugin-import": "^2.7.0",
-    "eslint-plugin-node": "^5.1.1",
-    "eslint-plugin-promise": "^3.5.0",
-    "eslint-plugin-standard": "^3.0.1",
-    "mocha": "~ 3.5.3",
-    "nano": "~6.4.0",
-    "should": "~13.0.1"
+    "eslint": "^7.6.0",
+    "mocha": "^8.1.1",
+    "nano": "^8.2.2",
+    "should": "^13.2.3"
   }
 }

@@ -1,66 +1,49 @@
 var crypto = require('crypto');
 
-var iterations = 10;
-var keylen = 20;
-var size = 16;
-var encoding = 'hex';
-var digest = 'SHA1';
+class CouchPwd {
+  constructor(iterations = 10, keylen = 20, size = 16, encoding = 'hex', digest = 'SHA1') {
+    this.iterations = iterations;
+    this.keylen = keylen;
+    this.size = size;
+    this.encoding = encoding;
+    this.digest = digest;
+  }
 
-// set iterations to `n`
-exports.iterations = function (n) {
-  if (arguments.length === 0) return iterations;
-  iterations = n;
-};
+  /**
+   * If `pwd` and `salt` are provided:
+   *  - creates a hash from both
+   *  - returns `hash`
+   * If just `pwd` is provided:
+   *  - generates `salt` and hashes
+   *  - returns `salt` and `hash`
+   */
+  hash(pwd, salt, cb = undefined) {
+    if (arguments.length === 3) {
+      // hash('secret', 'salt', function(err, hash) {})
+      if (!pwd) return cb(new Error('password missing'));
+      if (!salt) return cb(new Error('salt missing'));
 
-// set keylen to `n`
-exports.keylen = function (n) {
-  if (arguments.length === 0) return keylen;
-  keylen = n;
-};
-
-// set size to `n`
-exports.size = function (n) {
-  if (arguments.length === 0) return size;
-  size = n;
-};
-
-// set encoding to `str`
-exports.encoding = function (str) {
-  if (arguments.length === 0) return encoding;
-  encoding = str;
-};
-
-exports.hash = function (pwd, salt, cb) {
-  if (arguments.length === 3) {
-    // create hash from plain text password and salt
-    // hash('secret', 'salt', function(err, hash) {})
-
-    if (!pwd) return cb(new Error('password missing'));
-    if (!salt) return cb(new Error('salt missing'));
-
-    crypto.pbkdf2(pwd, salt, iterations, keylen, digest, function (err, hash) {
-      if (err) return cb(err);
-
-      cb(null, hash.toString(encoding));
-    });
-  } else {
-    // generate salt and password hash from plain text password
-    // hash('secret', function(err, salt, hash) {})
-
-    cb = salt;
-
-    if (!pwd) return cb(new Error('password missing'));
-
-    crypto.randomBytes(size, function (err, salt) {
-      if (err) return cb(err);
-
-      salt = salt.toString('hex');
-
-      crypto.pbkdf2(pwd, salt, iterations, keylen, digest, function (err, hash) {
+      crypto.pbkdf2(pwd, salt, this.iterations, this.keylen, this.digest, (err, hash) => {
         if (err) return cb(err);
 
-        cb(null, salt, hash.toString(encoding));
+        cb(null, hash.toString(this.encoding));
       });
-    });
+    } else {
+      // hash('secret', function(err, salt, hash) {})
+      cb = salt;
+      if (!pwd) return cb(new Error('password missing'));
+
+      crypto.randomBytes(this.size, (err, salt) => {
+        if (err) return cb(err);
+
+        const saltStr = salt.toString('hex');
+        crypto.pbkdf2(pwd, saltStr, this.iterations, this.keylen, this.digest, (err, hash) => {
+          if (err) return cb(err);
+
+          cb(null, saltStr, hash.toString(this.encoding));
+        });
+      });
+    }
   }
-};
+}
+module.exports = CouchPwd;

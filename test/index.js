@@ -1,7 +1,14 @@
 /* eslint-env node, mocha */
-var db = require('nano')('http://localhost:5984/_users');
+var url = 'http://';
+if (process.env.COUCH_USER && process.env.COUCH_PASS) {
+  url += process.env.COUCH_USER + ':' + process.env.COUCH_PASS;
+}
+url += '@localhost:5984/_users';
+var db = require('nano')(url);
 
-var pwd = require('../');
+var pwdModule = require('../');
+var pwd = new pwdModule();
+var other = new pwdModule(1000, 32, 64);
 
 describe('couch-pwd', function () {
   it('should generate a salt and hash', function (done) {
@@ -110,30 +117,38 @@ describe('couch-pwd', function () {
   });
 
   it('should set iterations', function (done) {
-    pwd.iterations().should.equal(10);
-    pwd.iterations(20);
-    pwd.iterations().should.equal(20);
+    pwd.iterations.should.equal(10);
+    pwd.iterations = 20;
+    pwd.iterations.should.equal(20);
     done();
   });
 
   it('should set keylen', function (done) {
-    pwd.keylen().should.equal(20);
-    pwd.keylen(30);
-    pwd.keylen().should.equal(30);
+    pwd.keylen.should.equal(20);
+    pwd.keylen = 30;
+    pwd.keylen.should.equal(30);
     done();
   });
 
   it('should set size', function (done) {
-    pwd.size().should.equal(16);
-    pwd.size(32);
-    pwd.size().should.equal(32);
+    pwd.size.should.equal(16);
+    pwd.size = 32;
+    pwd.size.should.equal(32);
     done();
   });
 
   it('should set encoding', function (done) {
-    pwd.encoding().should.equal('hex');
-    pwd.encoding('base64');
-    pwd.encoding().should.equal('base64');
+    pwd.encoding.should.equal('hex');
+    pwd.encoding = 'base64';
+    pwd.encoding.should.equal('base64');
+    done();
+  });
+
+  it('should not have changed other', function (done) {
+    other.size.should.equal(64);
+    other.keylen.should.equal(32);
+    other.iterations.should.equal(1000);
+    other.encoding.should.equal('hex');
     done();
   });
 });
